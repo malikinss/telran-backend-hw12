@@ -22,17 +22,17 @@ const adminAuth: RequestHandler = auth(["ADMIN"]);
 
 /**
  * GET /employees
- * Returns all employees.
- * Access: USER, ADMIN
+ * Retrieves all employees, optionally filtered by department.
+ * Access: USER and ADMIN
  */
-router.get("/", allAuth, getAllEmployees);
+router.get("/", allAuth, await getAllEmployees);
 
 /**
  * POST /employees
  * Creates a new employee.
  * Access: ADMIN only
  */
-router.post("/", adminAuth, validate(employeeSchema), createEmployee);
+router.post("/", adminAuth, validate(employeeSchema), await createEmployee);
 
 /**
  * PATCH /employees/:id
@@ -43,7 +43,7 @@ router.patch(
 	"/:id",
 	adminAuth,
 	validate(employeeSchemaPartial),
-	updateEmployee
+	await updateEmployee
 );
 
 /**
@@ -51,6 +51,6 @@ router.patch(
  * Deletes an employee by ID.
  * Access: ADMIN only
  */
-router.delete("/:id", adminAuth, deleteEmployee);
+router.delete("/:id", adminAuth, await deleteEmployee);
 
 export default router;

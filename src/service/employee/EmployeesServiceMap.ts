@@ -33,21 +33,12 @@ class EmployeesServiceMap implements EmployeesService {
 		this._loadFromFile();
 	}
 
-	/**
-	 * Loads employees from file storage into the internal Map.
-	 * @private
-	 */
 	private _loadFromFile(): void {
 		const loaded = fileStorage.loadEmployees();
 		this._fillEmployeeMap(loaded);
 		logger.debug(messages.loading(this._employees.size));
 	}
 
-	/**
-	 * Populates the internal Map with employees from an array.
-	 * @param {Employee[]} employees - Array of employees to insert into the Map.
-	 * @private
-	 */
 	private _fillEmployeeMap(employees: Employee[]): void {
 		this._employees.clear();
 		for (const employee of employees) {
@@ -59,13 +50,7 @@ class EmployeesServiceMap implements EmployeesService {
 		}
 	}
 
-	/**
-	 * Adds a new employee to the in-memory store.
-	 * @param {Employee} empl - Employee object to add.
-	 * @returns {Employee} The added employee object.
-	 * @throws {AlreadyExistsError} If employee with same ID already exists.
-	 */
-	addEmployee(empl: Employee): Employee {
+	async addEmployee(empl: Employee): Promise<Employee> {
 		const id: string = empl.id ?? uuidv4();
 		if (this._employees.has(id)) {
 			throw new AlreadyExistsError(id);
@@ -76,12 +61,7 @@ class EmployeesServiceMap implements EmployeesService {
 		return empl;
 	}
 
-	/**
-	 * Retrieves all employees, optionally filtered by department.
-	 * @param {string} [department] - Optional department to filter by.
-	 * @returns {Employee[]} Array of Employee objects.
-	 */
-	getAll(department?: string): Employee[] {
+	async getAll(department?: string): Promise<Employee[]> {
 		let all: Employee[] = Array.from(this._employees.values());
 		if (department) {
 			all = all.filter((empl) => empl.department === department);
@@ -89,39 +69,24 @@ class EmployeesServiceMap implements EmployeesService {
 		return all;
 	}
 
-	/**
-	 * Updates an existing employee's details.
-	 * @param {string} id - ID of the employee to update.
-	 * @param {Partial<Employee>} empl - Partial employee object with updated fields.
-	 * @returns {Employee} The updated employee object.
-	 */
-	updateEmployee(id: string, empl: Partial<Employee>): Employee {
-		const existing = this._getById(id);
+	async updateEmployee(
+		id: string,
+		empl: Partial<Employee>
+	): Promise<Employee> {
+		const existing = await this._getById(id);
 		Object.assign(existing, empl);
 		this._isUpdated = true;
 		return existing;
 	}
 
-	/**
-	 * Deletes an employee by ID.
-	 * @param {string} id - ID of the employee to delete.
-	 * @returns {Employee} The deleted employee object.
-	 */
-	deleteEmployee(id: string): Employee {
-		const existing = this._getById(id);
+	async deleteEmployee(id: string): Promise<Employee> {
+		const existing = await this._getById(id);
 		this._employees.delete(id);
 		this._isUpdated = true;
 		return existing;
 	}
 
-	/**
-	 * Retrieves an employee by ID, throwing NotFoundError if not found.
-	 * @param {string} id - ID of the employee to retrieve.
-	 * @returns {Employee} The Employee object.
-	 * @throws {NotFoundError} If the employee does not exist.
-	 * @private
-	 */
-	private _getById(id: string): Employee {
+	private async _getById(id: string): Promise<Employee> {
 		const existing = this._employees.get(id);
 		if (!existing) {
 			throw new NotFoundError(id);
@@ -129,20 +94,10 @@ class EmployeesServiceMap implements EmployeesService {
 		return existing;
 	}
 
-	/**
-	 * Converts the in-memory employees to an array.
-	 * @returns {Employee[]} Array of Employee objects.
-	 * @example
-	 * const employeesArray = employeesService.toArray();
-	 */
 	toArray(): Employee[] {
 		return Array.from(this._employees.values());
 	}
 
-	/**
-	 * Returns whether the in-memory store has unsaved changes.
-	 * @returns {boolean} True if employees have been added/updated/deleted since last save.
-	 */
 	isUpdated(): boolean {
 		return this._isUpdated;
 	}

@@ -20,17 +20,30 @@ import { Employee } from "../../model/dtoTypes/Employee.ts";
  * const deletedEmployee = service.deleteEmployee("123");
  */
 export default interface EmployeesService {
-	/** Retrieves all employees, optionally filtered by department.
-	 * @param {string} [department] - Optional department to filter employees.
-	 * @returns {Employee[]} - Array of employees.
+	/**
+	 * Retrieves all employees, optionally filtered by department.
+	 * @param department - Optional department to filter employees by.
+	 * @returns {Promise<Employee[]>} - Promise resolving to an array of Employee objects.
+	 * @example
+	 * const employees = await service.getAll("Sales");
+	 * const allEmployees = await service.getAll();
+	 * @throws {Error} - If the retrieval fails.
+	 * @exampleResponse
+	 * [ { "id": "1", "fullName": "John Doe", "avatar": "http://example.com/avatar.jpg", "department": "Sales", "birthDate": "1990-01-01", "salary": 50000 } ]
 	 */
-	getAll(department?: string): Employee[];
+	getAll(department?: string): Promise<Employee[]>;
 
-	/** Adds a new employee.
-	 * @param {Employee} empl - Employee object to add.
-	 * @returns {Employee} - The added employee with assigned ID.
+	/**
+	 * Adds a new employee.
+	 * @param empl - Employee object to add.
+	 * @returns {Promise<Employee>} The added employee object.
+	 * @example
+	 * const newEmployee = await service.addEmployee({ fullName: "Jane Doe", department: "Marketing" });
+	 * @throws {Error} If the addition fails.
+	 * @exampleResponse
+	 * { "id": "2", "fullName": "Jane Doe", "avatar": "http://example.com/avatar2.jpg", "department": "Marketing", "birthDate": "1992-02-02", "salary": 60000 }
 	 */
-	addEmployee(empl: Employee): Employee;
+	addEmployee(empl: Employee): Promise<Employee>;
 
 	/** Updates an existing employee by ID.
 	 * @param {string} id - ID of the employee to update.
@@ -38,12 +51,12 @@ export default interface EmployeesService {
 	 * @return {Employee} - The updated employee.
 	 * @throws {Error} - Throws an error if the employee with the given ID does not exist.
 	 */
-	updateEmployee(id: string, empl: Partial<Employee>): Employee;
+	updateEmployee(id: string, empl: Partial<Employee>): Promise<Employee>;
 
 	/** Deletes an employee by ID.
 	 * @param {string} id - ID of the employee to delete.
 	 * @returns {Employee} - The deleted employee.
 	 * @throws {Error} - Throws an error if the employee with the given ID does not exist.
 	 */
-	deleteEmployee(id: string): Employee;
+	deleteEmployee(id: string): Promise<Employee>;
 }

@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Employee } from "../../model/dtoTypes/Employee.ts";
 import EmployeesService from "./EmployeesService.ts";
 import { fileStorage } from "../../utils/fileStorage.ts";
+import { registerEmployeeService } from "../registry.ts";
 import {
 	AlreadyExistsError,
 	NotFoundError,
@@ -18,6 +19,7 @@ const messages = {
 		`${logPrefix} ⚠️  Skipping employee without ID: ${employee}`,
 };
 
+const FACTORY_KEY = "map";
 /**
  * In-memory implementation of EmployeesService using a Map.
  * Provides methods to add, get, update, and delete employees.
@@ -73,20 +75,20 @@ class EmployeesServiceMap implements EmployeesService {
 		id: string,
 		empl: Partial<Employee>
 	): Promise<Employee> {
-		const existing = await this._getById(id);
+		const existing = await this.getEmployee(id);
 		Object.assign(existing, empl);
 		this._isUpdated = true;
 		return existing;
 	}
 
 	async deleteEmployee(id: string): Promise<Employee> {
-		const existing = await this._getById(id);
+		const existing = await this.getEmployee(id);
 		this._employees.delete(id);
 		this._isUpdated = true;
 		return existing;
 	}
 
-	private async _getById(id: string): Promise<Employee> {
+	async getEmployee(id: string): Promise<Employee> {
 		const existing = this._employees.get(id);
 		if (!existing) {
 			throw new NotFoundError(id);
@@ -103,4 +105,4 @@ class EmployeesServiceMap implements EmployeesService {
 	}
 }
 
-export const employeesService = new EmployeesServiceMap();
+registerEmployeeService(FACTORY_KEY, async () => new EmployeesServiceMap());

@@ -1,10 +1,10 @@
-// src/__tests__/employeeRoutesTests/employeePostRoutes.test.ts
+// src/__tests__/routesTests/employeeRoutesTests/employeePostRoutes.test.ts
 
 import supertest from "supertest";
 import assert from "assert/strict";
 import test from "node:test";
 import { app } from "../allRoutes.test.ts";
-import logger from "../../utils/logger.ts";
+import logger from "../../../utils/logger.ts";
 
 import {
 	employeeTestData,

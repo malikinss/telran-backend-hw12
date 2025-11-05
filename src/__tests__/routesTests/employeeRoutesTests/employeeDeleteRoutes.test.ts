@@ -1,4 +1,4 @@
-// src/__tests__/employeeRoutesTests/employeeDeleteRoutes.test.ts
+// src/__tests__/routesTests/employeeRoutesTests/employeeDeleteRoutes.test.ts
 
 import supertest from "supertest";
 import assert from "assert/strict";
@@ -10,7 +10,7 @@ import {
 	adminTestData,
 	userTestData,
 } from "../testData/index.ts";
-import logger from "../../utils/logger.ts";
+import logger from "../../../utils/logger.ts";
 
 const { adminAuthHeader } = adminTestData;
 const { userAuthHeader } = userTestData;

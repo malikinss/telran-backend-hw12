@@ -1,11 +1,11 @@
-// src/__tests__/employeeRoutesTests/employeeGetRoutes.test.ts
+// src/__tests__/routesTests/employeeRoutesTests/employeeGetRoutes.test.ts
 
 import supertest from "supertest";
 import assert from "assert/strict";
 import test from "node:test";
 import { app } from "../allRoutes.test.ts";
 import { adminTestData, userTestData } from "../testData/index.ts";
-import logger from "../../utils/logger.ts";
+import logger from "../../../utils/logger.ts";
 
 const { adminAuthHeader } = adminTestData;
 const { userAuthHeader } = userTestData;

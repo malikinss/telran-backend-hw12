@@ -1,10 +1,10 @@
-// src/__tests__/loginRoutesTests/loginPostRoutes.test.ts
+// src/__tests__/routesTests/loginRoutesTests/loginPostRoutes.test.ts
 
 import supertest from "supertest";
 import assert from "assert/strict";
 import test from "node:test";
 import { app } from "../allRoutes.test.ts";
-import logger from "../../utils/logger.ts";
+import logger from "../../../utils/logger.ts";
 
 import { userTestData } from "../testData/index.ts";
 const { loginCorrect, loginIncorrect } = userTestData;

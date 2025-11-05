@@ -2,10 +2,17 @@
 
 import EmployeesService from "./EmployeesService.ts";
 import { Employee } from "../../model/dtoTypes/Employee.ts";
+import { registerEmployeeService } from "../registry.ts";
+
+const FACTORY_KEY = "mock";
 
 export default class EmployeesServiceMock implements EmployeesService {
 	async getAll(department?: string): Promise<Employee[]> {
 		return [];
+	}
+
+	async getEmployee(id: string): Promise<Employee> {
+		return {} as Employee;
 	}
 
 	async addEmployee(empl: Employee): Promise<Employee> {
@@ -23,3 +30,5 @@ export default class EmployeesServiceMock implements EmployeesService {
 		return {} as Employee;
 	}
 }
+
+registerEmployeeService(FACTORY_KEY, async (_) => new EmployeesServiceMock());

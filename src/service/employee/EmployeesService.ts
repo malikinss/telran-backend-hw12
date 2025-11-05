@@ -34,6 +34,15 @@ export default interface EmployeesService {
 	getAll(department?: string): Promise<Employee[]>;
 
 	/**
+	 * Retrieves an employee by ID.
+	 * @param id - ID of the employee to retrieve.
+	 * @returns {Promise<Employee>} - Promise resolving to the Employee object.
+	 * @example
+	 * const employee = await service.getEmployee("123");
+	 */
+	getEmployee(id: string): Promise<Employee>;
+
+	/**
 	 * Adds a new employee.
 	 * @param empl - Employee object to add.
 	 * @returns {Promise<Employee>} The added employee object.

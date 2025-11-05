@@ -1,7 +1,7 @@
 // src/controller/employeeController.ts
 
 import { Request, Response, NextFunction } from "express";
-import { employeesService } from "../service/employee/EmployeesServiceMap.ts";
+import service from "../service/bootstrap.ts";
 import { Employee } from "../model/dtoTypes/Employee.ts";
 import logger from "../utils/logger.ts";
 
@@ -51,7 +51,7 @@ async function getAllEmployees(
 			? req.query.department
 			: undefined;
 	logger.debug(messages.getAll.start, { department });
-	const employees: Employee[] = await employeesService.getAll(department);
+	const employees: Employee[] = await service.getAll(department);
 	logger.info(messages.getAll.success(employees.length));
 	res.status(200).json(employees);
 }
@@ -79,9 +79,7 @@ async function createEmployee(
 		fullName: newEmployee.fullName,
 		department: newEmployee.department,
 	});
-	const addedEmployee: Employee = await employeesService.addEmployee(
-		newEmployee
-	);
+	const addedEmployee: Employee = await service.addEmployee(newEmployee);
 	logger.info(messages.create.success(addedEmployee.id));
 	res.status(201).json(addedEmployee);
 }
@@ -107,7 +105,7 @@ async function updateEmployee(
 ): Promise<void> {
 	const id: string = req.params.id;
 	logger.debug(messages.update.start, { id, updates: req.body });
-	const updated: Employee | null = await employeesService.updateEmployee(
+	const updated: Employee | null = await service.updateEmployee(
 		id,
 		req.body as Partial<Employee>
 	);
@@ -136,7 +134,7 @@ async function deleteEmployee(
 ): Promise<void> {
 	const id: string = req.params.id;
 	logger.debug(messages.delete.start, { id });
-	const deleted: Employee | null = await employeesService.deleteEmployee(id);
+	const deleted: Employee | null = await service.deleteEmployee(id);
 	logger.info(messages.delete.success(deleted?.id));
 	res.status(200).json(deleted);
 }
